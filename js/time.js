@@ -72,3 +72,27 @@ export function formatCountdown(ms) {
   const s = Math.max(0, Math.floor(ms / 1000));
   return `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`;
 }
+
+const MIN = 60e3;
+
+// Which sky to paint: night before Imsak / from Isyak, dawn until 30 min after sunrise,
+// dusk from 45 min before Maghrib.
+export function skyPhase(today, nowMs) {
+  const e = (k) => toEpoch(today.ymd, today.times[k]);
+  if (nowMs < e("imsak") || nowMs >= e("isyak")) return "night";
+  if (nowMs < e("syuruk") + 30 * MIN) return "dawn";
+  if (nowMs >= e("maghrib") - 45 * MIN) return "dusk";
+  return "day";
+}
+
+// Fraction (0..1) of the way from the previous prayer to the next one; null if next is unknown.
+export function prayerProgress(today, tomorrow, nowMs) {
+  const next = nextPrayer(today, tomorrow, nowMs);
+  if (!next) return null;
+  let prev = toEpoch(today.ymd, today.times.isyak) - 864e5;
+  for (const key of COUNTDOWN_KEYS) {
+    const t = toEpoch(today.ymd, today.times[key]);
+    if (t <= nowMs) prev = t;
+  }
+  return Math.min(1, Math.max(0, (nowMs - prev) / (next.at - prev)));
+}

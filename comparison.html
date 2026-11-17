@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Preview</title>
+<style>
+  :root { --bg: #eef0ee; --text: #111; --muted: #555; --card: #fff; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0e0f0f; --text: #eee; --muted: #aaa; --card: #191b1a; } }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.45 system-ui, "Segoe UI", sans-serif; }
+  header, section { max-width: 1240px; margin: 0 auto; padding: 16px; }
+  h1 { margin: 8px 0 4px; font-size: 1.4rem; }
+  p { margin: 0; color: var(--muted); }
+  section { background: var(--card); border-radius: 16px; margin: 16px auto; }
+  h2 { margin: 0 0 4px; font-size: 1.15rem; }
+  .row { display: flex; gap: 16px; overflow-x: auto; padding: 12px 0 6px; }
+  figure { margin: 0; flex: 0 0 auto; }
+  figcaption { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+  iframe { width: 375px; height: 780px; border: 1px solid rgb(128 128 128 / 0.3); border-radius: 18px; display: block; }
+  iframe.wide { width: 1100px; height: 780px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>New design: pick A or B</h1>
+  <p>Both use the same layout, sky, ring and icons. They differ only in the fonts. Each row shows the four skies (the page pretends it's that time). Scroll sideways. The last row is desktop.</p>
+</header>
+<main id="list"></main>
+<script>
+const VARIANTS = [
+  { v: "a", name: "A · Lora + Raleway (“Wellness Calm”)" },
+  { v: "b", name: "B · Playfair Display + Inter (“Classic Elegant”)" },
+];
+const TIMES = [["06:20", "Dawn"], ["14:30", "Day"], ["18:40", "Dusk"], ["21:30", "Night"]];
+const list = document.getElementById("list");
+for (const { v, name } of VARIANTS) {
+  const sec = document.createElement("section");
+  const h = document.createElement("h2"); h.textContent = name; sec.append(h);
+  const row = document.createElement("div"); row.className = "row";
+  for (const [time, label] of TIMES) {
+    const fig = document.createElement("figure");
+    const cap = document.createElement("figcaption"); cap.textContent = `${label} (${time})`;
+    const f = document.createElement("iframe"); f.src = `./?v=${v}&t=${time}`; f.loading = "lazy"; f.title = `${name} ${label}`;
+    fig.append(cap, f); row.append(fig);
+  }
+  const fig = document.createElement("figure");
+  const cap = document.createElement("figcaption"); cap.textContent = "Desktop (14:30)";
+  const f = document.createElement("iframe"); f.className = "wide"; f.src = `./?v=${v}&t=14:30`; f.loading = "lazy"; f.title = `${name} desktop`;
+  fig.append(cap, f); row.append(fig);
+  sec.append(row); list.append(sec);
+}
+</script>
+</body>
+</html>
