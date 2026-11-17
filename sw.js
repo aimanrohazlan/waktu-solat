@@ -1,6 +1,6 @@
 // App-shell cache. Network-first so updates appear when online; cache when offline.
 // Prayer-time data is NOT handled here (it's cached per month in localStorage).
-const CACHE = "ws-shell-v1";
+const CACHE = "ws-shell-v2";
 const SHELL = [
   "./", "index.html", "css/styles.css",
   "js/app.js", "js/time.js", "js/zones.js", "js/i18n.js", "js/data.js", "js/settings.js",

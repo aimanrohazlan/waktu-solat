@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="ms">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Waktu Solat</title>
-  <meta name="description" content="Waktu solat Malaysia daripada JAKIM (e-solat.gov.my).">
+  <meta name="description" content="Malaysian prayer times from JAKIM (e-solat.gov.my).">
   <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d1514" media="(prefers-color-scheme: dark)">
   <link rel="manifest" href="manifest.webmanifest">
@@ -19,13 +19,9 @@
   <header class="topbar">
     <span class="brand">Waktu Solat</span>
     <div class="controls">
-      <div class="seg" role="group" id="lang-group">
-        <button type="button" data-lang="ms">BM</button>
-        <button type="button" data-lang="en">EN</button>
-      </div>
-      <div class="seg" role="group" id="fmt-group">
-        <button type="button" data-fmt="24" data-i18n="fmt24">24j</button>
-        <button type="button" data-fmt="12" data-i18n="fmt12">12j</button>
+      <div class="seg" role="group" aria-label="Time format">
+        <button type="button" data-fmt="24">24h</button>
+        <button type="button" data-fmt="12">12h</button>
       </div>
     </div>
   </header>
@@ -33,7 +29,7 @@
   <main class="layout">
     <section class="card">
       <label class="zone">
-        <span class="zone-label" data-i18n="zone">Zon</span>
+        <span class="zone-label">Zone</span>
         <select id="zone"></select>
       </label>
       <h1 id="zone-name" class="zone-name"></h1>
@@ -41,7 +37,7 @@
 
       <div id="status" class="status" role="status" aria-live="polite" hidden>
         <p id="status-text"></p>
-        <button type="button" id="retry" class="retry" data-i18n="retry" hidden>Cuba lagi</button>
+        <button type="button" id="retry" class="retry" hidden>Retry</button>
       </div>
 
       <div id="countdown" class="countdown" role="timer" aria-live="off" hidden>
@@ -63,6 +59,6 @@
     </section>
   </main>
 
-  <footer class="foot" data-i18n="source">Sumber: JAKIM (e-solat.gov.my)</footer>
+  <footer class="foot">Source: JAKIM (e-solat.gov.my)</footer>
 </body>
 </html>

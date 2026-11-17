@@ -42,9 +42,6 @@ function buildZoneSelect() {
 }
 
 function bindToggles() {
-  for (const b of document.querySelectorAll("[data-lang]")) {
-    b.addEventListener("click", () => { state.settings.lang = b.dataset.lang; saveSettings(state.settings); render(); });
-  }
   for (const b of document.querySelectorAll("[data-fmt]")) {
     b.addEventListener("click", () => { state.settings.fmt = b.dataset.fmt; saveSettings(state.settings); render(); });
   }
@@ -73,23 +70,18 @@ async function load() {
 }
 
 function render() {
-  const { lang, fmt, zone } = state.settings;
-  document.documentElement.lang = lang;
-  for (const n of document.querySelectorAll("[data-i18n]")) n.textContent = t(lang, n.dataset.i18n);
-  for (const b of document.querySelectorAll("[data-lang]")) b.setAttribute("aria-pressed", String(b.dataset.lang === lang));
-  for (const b of document.querySelectorAll("[data-fmt]")) b.setAttribute("aria-pressed", String(b.dataset.fmt === fmt));
-  $("lang-group").setAttribute("aria-label", t(lang, "language"));
-  $("fmt-group").setAttribute("aria-label", t(lang, "timeFormat"));
+  const { zone } = state.settings;
+  for (const b of document.querySelectorAll("[data-fmt]")) b.setAttribute("aria-pressed", String(b.dataset.fmt === state.settings.fmt));
 
   $("zone").value = zone;
   const z = findZone(zone);
   $("zone-name").textContent = z ? z.name : zone;
-  $("greg").textContent = formatGregorian(state.ymd, lang);
-  $("hijri").textContent = state.data ? formatHijri(state.data.today.hijri, lang) : "";
+  $("greg").textContent = formatGregorian(state.ymd);
+  $("hijri").textContent = state.data ? formatHijri(state.data.today.hijri) : "";
 
   const status = $("status");
   status.hidden = !(state.loading || state.error);
-  $("status-text").textContent = state.error ? t(lang, "error") : t(lang, "loading");
+  $("status-text").textContent = state.error ? t("error") : t("loading");
   $("retry").hidden = !state.error;
 
   renderTimes();
@@ -101,13 +93,13 @@ function renderTimes() {
   const list = $("times");
   list.replaceChildren();
   if (!state.data) return;
-  const { lang, fmt } = state.settings;
+  const { fmt } = state.settings;
   const next = nextPrayer(state.data.today, state.data.tomorrow, Date.now());
   state.nextKey = next ? next.key + (next.isTomorrow ? ":t" : "") : null;
   for (const key of PRAYER_KEYS) {
     const li = el("li", COUNTDOWN_KEYS.includes(key) ? "" : "minor");
     if (next && !next.isTomorrow && next.key === key) li.classList.add("next");
-    li.append(el("span", "n", t(lang, key)), el("span", "t", formatTime(state.data.today.times[key], fmt)));
+    li.append(el("span", "n", t(key)), el("span", "t", formatTime(state.data.today.times[key], fmt)));
     list.append(li);
   }
 }
@@ -116,19 +108,19 @@ function renderMonth() {
   const section = $("month-section");
   section.hidden = !state.data;
   if (!state.data) return;
-  const { lang, fmt } = state.settings;
+  const { fmt } = state.settings;
   const [y, m] = state.ymd.split("-").map(Number);
-  $("month-title").textContent = `${t(lang, "month")} · ${monthName(m, lang)} ${y}`;
+  $("month-title").textContent = `${t("month")} · ${monthName(m)} ${y}`;
 
   const headRow = $("month-table").tHead.rows[0];
-  headRow.replaceChildren(el("th", null, t(lang, "date")), ...PRAYER_KEYS.map((k) => el("th", null, t(lang, k))));
+  headRow.replaceChildren(el("th", null, t("date")), ...PRAYER_KEYS.map((k) => el("th", null, t(k))));
 
   const body = $("month-table").tBodies[0];
   body.replaceChildren();
   for (const d of state.data.month) {
     const tr = el("tr", d.ymd === state.ymd ? "today" : "");
     const first = el("td", null, String(Number(d.ymd.slice(8))));
-    first.append(el("span", "dow", dayName(d.ymd, lang).slice(0, 3)));
+    first.append(el("span", "dow", dayName(d.ymd).slice(0, 3)));
     tr.append(first, ...PRAYER_KEYS.map((k) => el("td", null, formatTime(d.times[k], fmt))));
     body.append(tr);
   }
@@ -139,9 +131,8 @@ function renderCountdown() {
   const next = state.data && nextPrayer(state.data.today, state.data.tomorrow, Date.now());
   box.hidden = !next;
   if (!next) return;
-  const { lang } = state.settings;
-  const suffix = next.isTomorrow ? ` (${t(lang, "tomorrow")})` : "";
-  $("cd-label").textContent = `${t(lang, next.key)} ${t(lang, "in")}${suffix}`;
+  const suffix = next.isTomorrow ? ` (${t("tomorrow")})` : "";
+  $("cd-label").textContent = `${t(next.key)} ${t("in")}${suffix}`;
   $("cd-time").textContent = formatCountdown(next.at - Date.now());
 }
 

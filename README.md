@@ -2,7 +2,7 @@
 
 Malaysian prayer times (JAKIM, from [e-solat.gov.my](https://www.e-solat.gov.my)) for phone and desktop.
 Pick your zone, see today's times with a countdown to the next prayer, and the monthly timetable.
-Labels switch between Bahasa Melayu and English, times between 24-hour and 12-hour.
+Times switch between 24-hour and 12-hour.
 It can be installed to the home screen and works offline for months already loaded.
 
 Plain HTML/CSS/JavaScript with no build step and no dependencies.

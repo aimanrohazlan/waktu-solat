@@ -14,7 +14,7 @@ times, and how long until the next one?" at a glance.
 - Live countdown to the next prayer; highlight the next prayer in the list.
 - Gregorian + Hijri date.
 - Zone picker (all JAKIM zones, grouped by state); remembered between visits.
-- Labels switchable between Bahasa Melayu and English; choice remembered.
+- English only (changed 2026-11-17 at user's request; originally BM/EN switchable).
 - Time format switchable between 24-hour and 12-hour; choice remembered.
 - Monthly timetable view for the selected zone.
 - Installable to the home screen (PWA); works offline for the cached month.
@@ -23,7 +23,7 @@ times, and how long until the next one?" at a glance.
 ## Non-goals
 
 - Alerts, notifications, azan sound (explicitly ruled out).
-- Qibla compass, user accounts, settings beyond zone, language and time format.
+- Qibla compass, user accounts, settings beyond zone and time format.
 - Calculating times ourselves — JAKIM data only.
 
 ## Anti-goals
@@ -45,15 +45,15 @@ times, and how long until the next one?" at a glance.
 
 ## Design
 
-- **Files:** `index.html`, `styles.css`, `app.js`, `zones.js` (zone list), `i18n.js` (BM/EN strings, Hijri month names), `manifest.webmanifest`, `sw.js`, icons.
-- **Data flow:** on load, read zone (default WLY01) and language (default BM) from localStorage. Use cached month for that zone if it covers today; otherwise fetch `period=month`, store it, render. If offline and no cache, show a clear message.
+- **Files:** `index.html`, `styles.css`, `app.js`, `zones.js` (zone list), `i18n.js` (English strings, Hijri month names), `manifest.webmanifest`, `sw.js`, icons.
+- **Data flow:** on load, read zone (default WLY01) and time format (default 24h) from localStorage. Use cached month for that zone if it covers today; otherwise fetch `period=month`, store it, render. If offline and no cache, show a clear message.
 - **Countdown:** ticks every second; after Isyak, counts down to the next day's Subuh (from cached month, or fetched).
 - **Service worker:** caches the app shell; API responses cached via localStorage as above.
 - **Theme:** follows system light/dark.
 
 ## Calls I made (correct any)
 
-- Default language Bahasa Melayu; default zone WLY01 (KL/Putrajaya).
+- Default zone WLY01 (KL/Putrajaya). Colours: kept the original green after comparing 4 alternatives.
 - Time format switchable between 24-hour and 12-hour (am/pm); default 24-hour; choice remembered.
 - No "use my location" zone detection in v1 — manual picker only.
 - Dhuha is not shown (not in the agreed list); easy to add.

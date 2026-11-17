@@ -1,7 +1,7 @@
 {
   "name": "Waktu Solat",
   "short_name": "Waktu Solat",
-  "description": "Waktu solat Malaysia daripada JAKIM (e-solat.gov.my).",
+  "description": "Malaysian prayer times from JAKIM (e-solat.gov.my).",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
