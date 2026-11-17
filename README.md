@@ -5,7 +5,7 @@ Pick your zone, see today's times with a countdown to the next prayer, and the m
 Times switch between 24-hour and 12-hour.
 It can be installed to the home screen and works offline for months already loaded.
 
-Plain HTML/CSS/JavaScript with no build step and no dependencies.
+Plain HTML/CSS/JavaScript with no build step and no dependencies. Fonts (Lora, Raleway) are bundled in `fonts/` under the SIL Open Font License.
 
 ## Run locally
 

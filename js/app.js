@@ -12,13 +12,7 @@ const el = (tag, cls, text) => {
   return e;
 };
 
-// Preview switches (used by the design comparison page): ?v=b picks the second font pairing,
-// ?t=HH:MM pretends it is that Malaysia time today.
-const params = new URLSearchParams(location.search);
-if (params.get("v") === "b") document.documentElement.dataset.variant = "b";
-const fakeTime = /^\d{2}:\d{2}$/.test(params.get("t") || "") ? params.get("t") : null;
-const offset = fakeTime ? toEpoch(myt().ymd, fakeTime) - Date.now() : 0;
-const now = () => Date.now() + offset;
+const now = () => Date.now();
 
 const ICONS = {
   imsak: '<path d="M14 4a6 6 0 1 0 6 8.5A5 5 0 1 1 14 4z"/><path d="M5 4v3M3.5 5.5h3"/>',
@@ -186,7 +180,7 @@ function tick() {
 
 buildZoneSelect();
 bindToggles();
-try { pruneCache(localStorage, myt().ymd.slice(0, 7)); } catch { /* storage blocked */ }
+try { pruneCache(localStorage, myt(now()).ymd.slice(0, 7)); } catch { /* storage blocked */ }
 load();
 setInterval(tick, 1000);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") tick(); });

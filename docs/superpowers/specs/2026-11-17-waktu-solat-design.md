@@ -49,7 +49,7 @@ times, and how long until the next one?" at a glance.
 - **Data flow:** on load, read zone (default WLY01) and time format (default 24h) from localStorage. Use cached month for that zone if it covers today; otherwise fetch `period=month`, store it, render. If offline and no cache, show a clear message.
 - **Countdown:** ticks every second; after Isyak, counts down to the next day's Subuh (from cached month, or fetched).
 - **Service worker:** caches the app shell; API responses cached via localStorage as above.
-- **Theme:** follows system light/dark.
+- **Theme:** follows system light/dark. Redesign (2026-11-17): hero card with a sky that follows the prayer times (dawn/day/dusk/night), mosque skyline, countdown ring between prayers, prayer icons, past prayers dimmed, glass cards over a geometric pattern, Lora + Raleway fonts bundled; green palette kept.
 
 ## Calls I made (correct any)
 

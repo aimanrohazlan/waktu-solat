@@ -1,7 +1,5 @@
 @font-face { font-family: "Lora"; src: url("../fonts/Lora.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
 @font-face { font-family: "Raleway"; src: url("../fonts/Raleway.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: "Playfair Display"; src: url("../fonts/PlayfairDisplay.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
-@font-face { font-family: "Inter"; src: url("../fonts/Inter.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
 
 :root {
   --bg: #f4f1ea;
@@ -22,11 +20,6 @@
   --font-head: "Lora", Georgia, serif;
   --font-body: "Raleway", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: light;
-}
-
-:root[data-variant="b"] {
-  --font-head: "Playfair Display", Georgia, serif;
-  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
