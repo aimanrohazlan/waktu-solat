@@ -1,0 +1,8 @@
+{
+  "name": "waktu-solat",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
