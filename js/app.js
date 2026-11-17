@@ -158,3 +158,7 @@ try { pruneCache(localStorage, myt().ymd.slice(0, 7)); } catch { /* storage bloc
 load();
 setInterval(tick, 1000);
 document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") tick(); });
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js").catch(() => { /* offline shell unavailable; app still works */ });
+}
