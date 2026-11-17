@@ -3,7 +3,7 @@ import { ZONES, STATES, findZone } from "./zones.js";
 import { t, formatGregorian, formatHijri, dayName, monthName } from "./i18n.js";
 import { loadDays, pruneCache } from "./data.js";
 import { loadSettings, saveSettings } from "./settings.js";
-import { zoneFromCoords } from "./locate.js";
+import { zoneFromCoords, locateMessage } from "./locate.js";
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, cls, text) => {
@@ -78,7 +78,7 @@ function getPosition() {
     navigator.geolocation.getCurrentPosition(
       (p) => resolve(p.coords),
       (e) => reject(new Error(e.code === 1 ? "denied" : "unavailable")),
-      { enableHighAccuracy: false, timeout: 15000, maximumAge: 10 * 60e3 },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
     );
   });
 }
@@ -89,10 +89,10 @@ async function locate() {
   btn.setAttribute("aria-busy", "true");
   showLocateMsg("Finding your location…", false);
   try {
-    const { latitude, longitude } = await getPosition();
+    const { latitude, longitude, accuracy } = await getPosition();
     const code = await zoneFromCoords(latitude, longitude);
-    const z = findZone(code);
-    showLocateMsg(`Zone set to ${code} · ${z.name}`, true);
+    const rough = accuracy > 1500;
+    showLocateMsg(locateMessage(code, accuracy), !rough);
     if (code !== state.settings.zone) setZone(code);
   } catch (e) {
     showLocateMsg(LOCATE_ERRORS[e.message] || LOCATE_ERRORS.unavailable, false);

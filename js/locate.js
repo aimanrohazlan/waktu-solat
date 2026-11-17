@@ -22,3 +22,11 @@ export async function zoneFromCoords(lat, lon, { fetchFn = (...a) => fetch(...a)
   if (!res.ok || typeof code !== "string" || !findZone(code)) throw new Error(res.status >= 500 && !body?.error ? "network" : "outside");
   return code;
 }
+
+// Message after a successful lookup; warns when the device's fix is rough (e.g. a desktop
+// locating itself from Wi-Fi or its internet connection instead of GPS).
+export function locateMessage(code, accuracyM) {
+  if (!(accuracyM > 1500)) return `Zone set to ${code}.`;
+  const km = Math.round(accuracyM / 1000);
+  return `Zone set to ${code}, but your device only knows your location to within about ${km} km. If the zone is wrong, pick it from the list.`;
+}

@@ -1,6 +1,6 @@
 // App-shell cache. Network-first so updates appear when online; cache when offline.
 // Prayer-time data is NOT handled here (it's cached per month in localStorage).
-const CACHE = "ws-shell-v5";
+const CACHE = "ws-shell-v6";
 const SHELL = [
   "./", "index.html", "css/styles.css",
   "js/app.js", "js/time.js", "js/zones.js", "js/i18n.js", "js/data.js", "js/settings.js", "js/locate.js",
@@ -24,7 +24,9 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== self.location.origin) return;
   e.respondWith(
-    fetch(e.request)
+    // "no-cache" makes the browser check GitHub for a newer file instead of reusing its
+    // 10-minute HTTP copy, so updates show up on the next open.
+    fetch(e.request, { cache: "no-cache" })
       .then((res) => {
         if (res.ok) {
           const copy = res.clone();

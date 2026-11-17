@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { GEO_API, zoneFromCoords } from "../js/locate.js";
+import { GEO_API, zoneFromCoords, locateMessage } from "../js/locate.js";
 
 const reply = (status, body) => {
   const calls = [];
@@ -38,4 +38,19 @@ test("network failure rejects with network", async () => {
 test("hanging request times out with network", async () => {
   const fetchFn = (url, opts) => new Promise((_, reject) => opts.signal.addEventListener("abort", () => reject(new Error("aborted"))));
   await assert.rejects(zoneFromCoords(3, 101, { fetchFn, timeoutMs: 30 }), /network/);
+});
+
+test("locateMessage confirms a precise fix", () => {
+  assert.equal(locateMessage("PRK05", 50), "Zone set to PRK05.");
+});
+
+test("locateMessage warns when the fix is rough", () => {
+  assert.equal(locateMessage("PRK01", 25000),
+    "Zone set to PRK01, but your device only knows your location to within about 25 km. If the zone is wrong, pick it from the list.");
+  assert.equal(locateMessage("PRK01", 2400),
+    "Zone set to PRK01, but your device only knows your location to within about 2 km. If the zone is wrong, pick it from the list.");
+});
+
+test("locateMessage treats missing accuracy as precise", () => {
+  assert.equal(locateMessage("WLY01", undefined), "Zone set to WLY01.");
 });
