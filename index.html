@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Waktu Solat</title>
+  <meta name="description" content="Waktu solat Malaysia daripada JAKIM (e-solat.gov.my).">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <span class="brand">Waktu Solat</span>
+    <div class="controls">
+      <div class="seg" role="group" id="lang-group">
+        <button type="button" data-lang="ms">BM</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      <div class="seg" role="group" id="fmt-group">
+        <button type="button" data-fmt="24" data-i18n="fmt24">24j</button>
+        <button type="button" data-fmt="12" data-i18n="fmt12">12j</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card" aria-live="polite">
+      <label class="zone">
+        <span class="zone-label" data-i18n="zone">Zon</span>
+        <select id="zone"></select>
+      </label>
+      <h1 id="zone-name" class="zone-name"></h1>
+      <p class="dates"><span id="greg"></span><span id="hijri" class="hijri"></span></p>
+
+      <div id="status" class="status" hidden>
+        <p id="status-text"></p>
+        <button type="button" id="retry" class="retry" data-i18n="retry" hidden>Cuba lagi</button>
+      </div>
+
+      <div id="countdown" class="countdown" hidden>
+        <span id="cd-label" class="cd-label"></span>
+        <span id="cd-time" class="cd-time"></span>
+      </div>
+
+      <ol id="times" class="times"></ol>
+    </section>
+
+    <section class="month" id="month-section" hidden>
+      <h2 id="month-title"></h2>
+      <div class="table-wrap">
+        <table id="month-table">
+          <thead><tr></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot" data-i18n="source">Sumber: JAKIM (e-solat.gov.my)</footer>
+</body>
+</html>
