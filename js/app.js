@@ -3,6 +3,7 @@ import { ZONES, STATES, findZone } from "./zones.js";
 import { t, formatGregorian, formatHijri, dayName, monthName } from "./i18n.js";
 import { loadDays, pruneCache } from "./data.js";
 import { loadSettings, saveSettings } from "./settings.js";
+import { zoneFromCoords } from "./locate.js";
 
 const $ = (id) => document.getElementById(id);
 const el = (tag, cls, text) => {
@@ -46,11 +47,58 @@ function buildZoneSelect() {
     }
     sel.append(group);
   }
-  sel.addEventListener("change", () => {
-    state.settings.zone = sel.value;
-    saveSettings(state.settings);
-    load();
+  sel.addEventListener("change", () => setZone(sel.value));
+}
+
+function setZone(code) {
+  state.settings.zone = code;
+  saveSettings(state.settings);
+  load();
+}
+
+const LOCATE_ERRORS = {
+  denied: "Location permission is blocked. Allow it in your browser settings, or pick your zone from the list.",
+  unavailable: "Couldn't get your location. Try again, or pick your zone from the list.",
+  outside: "Your location isn't inside a Malaysian prayer zone. Pick a zone from the list.",
+  network: "Couldn't look up your zone. Check your internet connection and try again.",
+};
+let msgTimer;
+
+function showLocateMsg(text, autoHide) {
+  const msg = $("locate-msg");
+  clearTimeout(msgTimer);
+  msg.textContent = text;
+  msg.hidden = false;
+  if (autoHide) msgTimer = setTimeout(() => { msg.hidden = true; }, 6000);
+}
+
+function getPosition() {
+  return new Promise((resolve, reject) => {
+    if (!("geolocation" in navigator)) return reject(new Error("unavailable"));
+    navigator.geolocation.getCurrentPosition(
+      (p) => resolve(p.coords),
+      (e) => reject(new Error(e.code === 1 ? "denied" : "unavailable")),
+      { enableHighAccuracy: false, timeout: 15000, maximumAge: 10 * 60e3 },
+    );
   });
+}
+
+async function locate() {
+  const btn = $("locate");
+  if (btn.getAttribute("aria-busy") === "true") return;
+  btn.setAttribute("aria-busy", "true");
+  showLocateMsg("Finding your location…", false);
+  try {
+    const { latitude, longitude } = await getPosition();
+    const code = await zoneFromCoords(latitude, longitude);
+    const z = findZone(code);
+    showLocateMsg(`Zone set to ${code} · ${z.name}`, true);
+    if (code !== state.settings.zone) setZone(code);
+  } catch (e) {
+    showLocateMsg(LOCATE_ERRORS[e.message] || LOCATE_ERRORS.unavailable, false);
+  } finally {
+    btn.setAttribute("aria-busy", "false");
+  }
 }
 
 function bindToggles() {
@@ -58,6 +106,7 @@ function bindToggles() {
     b.addEventListener("click", () => { state.settings.fmt = b.dataset.fmt; saveSettings(state.settings); render(); });
   }
   $("retry").addEventListener("click", load);
+  $("locate").addEventListener("click", locate);
 }
 
 async function load() {

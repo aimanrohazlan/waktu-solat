@@ -55,7 +55,7 @@ times, and how long until the next one?" at a glance.
 
 - Default zone WLY01 (KL/Putrajaya). Colours: kept the original green after comparing 4 alternatives.
 - Time format switchable between 24-hour and 12-hour (am/pm); default 24-hour; choice remembered.
-- No "use my location" zone detection in v1 — manual picker only.
+- Location button (added 2026-11-17 at user request): only on tap, never automatic. e-solat has no GPS lookup and the only zone-boundary GeoJSON found is unlicensed, so coordinates (rounded to 3 decimals) go to api.waktusolat.app/zones/{lat}/{lon}. Manual picker remains the fallback.
 - Dhuha is not shown (not in the agreed list); easy to add.
 
 ## Left to the builder

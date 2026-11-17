@@ -43,11 +43,17 @@
         </div>
 
         <div class="hero-body">
-          <label class="zone">
-            <span class="sr-only">Zone</span>
-            <svg class="pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
-            <select id="zone"></select>
-          </label>
+          <div class="zone-row">
+            <label class="zone">
+              <span class="sr-only">Zone</span>
+              <svg class="pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+              <select id="zone"></select>
+            </label>
+            <button type="button" id="locate" class="locate" aria-label="Use my location" title="Use my location">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+            </button>
+          </div>
+          <p id="locate-msg" class="locate-msg" role="status" aria-live="polite" hidden></p>
           <h1 id="zone-name" class="zone-name"></h1>
           <p class="dates"><span id="greg"></span><span id="hijri"></span></p>
 

@@ -33,3 +33,4 @@ When you change any app file, bump `CACHE` in `sw.js` (e.g. `ws-shell-v2`) so re
 - `js/data.js` asks e-solat for a whole month per zone and saves it in the browser (`localStorage`), so each zone-month is fetched once.
 - All time maths is done in Malaysia time (UTC+8), whatever timezone the device is set to.
 - `sw.js` caches the app files so it opens without a connection.
+- The location button (next to the zone list) asks the browser for your position only when tapped, rounds it to about 100 m, and asks the community [waktusolat.app](https://api.waktusolat.app/docs) API which JAKIM zone that is. Nothing else is sent anywhere.

@@ -228,12 +228,39 @@ button, select { font: inherit; color: inherit; }
   animation: rise 0.6s ease-out both;
 }
 
+.zone-row { display: flex; gap: 8px; align-self: stretch; }
 .zone {
   position: relative;
   display: flex;
   align-items: center;
-  align-self: stretch;
-  max-width: 100%;
+  flex: 1;
+  min-width: 0;
+}
+.locate {
+  flex: 0 0 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.22);
+  color: #fff;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.locate:hover { background: rgb(0 0 0 / 0.32); }
+.locate svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.locate[aria-busy="true"] { cursor: progress; }
+.locate[aria-busy="true"] svg { animation: spin 1.2s linear infinite; }
+.locate-msg {
+  margin: 10px 0 0;
+  padding: 8px 14px;
+  border-radius: 14px;
+  background: rgb(0 0 0 / 0.25);
+  font-size: 0.88rem;
+  line-height: 1.4;
 }
 .pin {
   position: absolute;
@@ -382,6 +409,7 @@ td .dow { margin-left: 6px; font-size: 0.78rem; opacity: 0.65; }
   text-align: center;
 }
 
+@keyframes spin { to { transform: rotate(360deg); } }
 @keyframes twinkle { from { opacity: 0.55; } to { opacity: 1; } }
 @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
