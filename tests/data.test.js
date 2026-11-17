@@ -76,3 +76,17 @@ test("pruneCache", () => {
   assert.deepEqual([...s._map.keys()].sort(), ["ws:m:WLY01:2026-11", "ws:m:WLY01:2026-12", "ws:settings"]);
   pruneCache({ get length() { throw new Error("denied"); } }, "2026-11"); // must not throw
 });
+
+test("loadMonth times out a hanging request", async () => {
+  const hang = (url, opts) => new Promise((_, reject) => {
+    opts.signal?.addEventListener("abort", () => reject(new Error("aborted")));
+  });
+  const start = Date.now();
+  await assert.rejects(loadMonth("WLY01", 2026, 11, { fetchFn: hang, storage: fakeStorage(), timeoutMs: 50 }));
+  assert.ok(Date.now() - start < 2000);
+});
+
+test("loadDays result names its zone", async () => {
+  const r = await loadDays("SGR03", "2026-11-17", { fetchFn: fakeFetch(), storage: fakeStorage() });
+  assert.equal(r.zone, "SGR03");
+});

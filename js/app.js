@@ -54,6 +54,8 @@ function bindToggles() {
 async function load() {
   const token = ++loadToken;
   state.ymd = myt().ymd;
+  // Never show times belonging to a different zone or date while the new ones load.
+  if (state.data && (state.data.zone !== state.settings.zone || state.data.today.ymd !== state.ymd)) state.data = null;
   state.loading = true;
   state.error = false;
   render();

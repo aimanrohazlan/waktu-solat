@@ -19,15 +19,23 @@ function writeCache(storage, key, days) {
   try { storage?.setItem(key, JSON.stringify(days)); } catch { /* storage full or blocked */ }
 }
 
-export async function loadMonth(zone, year, month, { fetchFn = defaultFetch, storage = defaultStorage() } = {}) {
+export async function loadMonth(zone, year, month, { fetchFn = defaultFetch, storage = defaultStorage(), timeoutMs = 15000 } = {}) {
   const key = `${PREFIX}${zone}:${year}-${pad(month)}`;
   const cached = readCache(storage, key);
   if (cached) return cached;
   const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
   const body = new URLSearchParams({ datestart: `${year}-${pad(month)}-01`, dateend: `${year}-${pad(month)}-${pad(lastDay)}` });
-  const res = await fetchFn(API + zone, { method: "POST", body });
-  if (!res.ok) throw new Error("bad-response");
-  const days = parseDays(await res.json());
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  let json;
+  try {
+    const res = await fetchFn(API + zone, { method: "POST", body, signal: ctrl.signal });
+    if (!res.ok) throw new Error("bad-response");
+    json = await res.json();
+  } finally {
+    clearTimeout(timer);
+  }
+  const days = parseDays(json);
   if (!days.length) throw new Error("bad-response");
   writeCache(storage, key, days);
   return days;
@@ -46,7 +54,7 @@ export async function loadDays(zone, ymd, deps = {}) {
       tomorrow = (await loadMonth(zone, ny, nm, deps)).find((d) => d.ymd === next) ?? null;
     } catch { tomorrow = null; }
   }
-  return { today, tomorrow, month };
+  return { zone, today, tomorrow, month };
 }
 
 export function pruneCache(storage, currentYm) {

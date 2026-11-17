@@ -31,7 +31,7 @@
   </header>
 
   <main class="layout">
-    <section class="card" aria-live="polite">
+    <section class="card">
       <label class="zone">
         <span class="zone-label" data-i18n="zone">Zon</span>
         <select id="zone"></select>
@@ -39,12 +39,12 @@
       <h1 id="zone-name" class="zone-name"></h1>
       <p class="dates"><span id="greg"></span><span id="hijri" class="hijri"></span></p>
 
-      <div id="status" class="status" hidden>
+      <div id="status" class="status" role="status" aria-live="polite" hidden>
         <p id="status-text"></p>
         <button type="button" id="retry" class="retry" data-i18n="retry" hidden>Cuba lagi</button>
       </div>
 
-      <div id="countdown" class="countdown" hidden>
+      <div id="countdown" class="countdown" role="timer" aria-live="off" hidden>
         <span id="cd-label" class="cd-label"></span>
         <span id="cd-time" class="cd-time"></span>
       </div>

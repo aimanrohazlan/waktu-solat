@@ -25,7 +25,12 @@ export function parseDays(json) {
   if (!json || json.status !== "OK!" || !Array.isArray(json.prayerTime)) throw new Error("bad-response");
   return json.prayerTime.map((p) => {
     const times = {};
-    for (const key of PRAYER_KEYS) times[key] = String(p[SOURCE_FIELD[key]]).slice(0, 5);
+    for (const key of PRAYER_KEYS) {
+      const v = p?.[SOURCE_FIELD[key]];
+      if (typeof v !== "string" || !/^([01]\d|2[0-3]):[0-5]\d/.test(v)) throw new Error("bad-response");
+      times[key] = v.slice(0, 5);
+    }
+    if (typeof p.hijri !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(p.hijri)) throw new Error("bad-response");
     return { ymd: parseDate(p.date), hijri: p.hijri, times };
   });
 }

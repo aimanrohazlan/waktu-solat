@@ -78,3 +78,11 @@ test("formatCountdown", () => {
   assert.equal(formatCountdown(-5), "00:00:00");
   assert.equal(formatCountdown(90061000), "25:01:01");
 });
+
+test("parseDays rejects missing or malformed fields", () => {
+  const { asr, ...noAsr } = raw("17-Nov-2026");
+  assert.throws(() => parseDays(ok(noAsr)), /bad-response/);
+  assert.throws(() => parseDays(ok({ ...raw("17-Nov-2026"), isha: null })), /bad-response/);
+  assert.throws(() => parseDays(ok({ ...raw("17-Nov-2026"), hijri: undefined })), /bad-response/);
+  assert.throws(() => parseDays(ok({ ...raw("17-Nov-2026"), maghrib: "7pm" })), /bad-response/);
+});
